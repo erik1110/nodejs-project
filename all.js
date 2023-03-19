@@ -38,6 +38,7 @@ function checkReward(data) {
     return new Promise((resolve, reject)=>{
         console.log("檢查獎品中");
         setTimeout(()=>{
+            console.log(data.score);
             if (data.score>=90) {
                 resolve(`${data.name}獲得電影票`)
             } else if (data.score>=60 && data.score<90) {
@@ -50,8 +51,39 @@ function checkReward(data) {
     })
 }
 
-correctTest("小明")
-    .then(data=>checkReward(data))
-    .then(name => console.log(`${name}`))
-    .catch(error=>console.log(error))
+// correctTest("小明")
+//     .then(data=>checkReward(data))
+//     .then(name => console.log(`${name}`))
+//     .catch(error=>console.log(error))
 
+
+// async、await 的寫法
+const init = async function() {
+    try {
+        const studentA = await correctTest("小明");
+        const rewardA = await checkReward(studentA);
+        console.log(rewardA);
+    } catch(error) {
+        console.log(error)
+    }
+}
+init();
+
+// Promise all 
+
+function correctTest2(name) {
+    return new Promise((resolve, reject)=>{
+        console.log("批改作業中2");
+        setTimeout(()=>{
+            const score = Math.round(Math.random()*100);
+            resolve(
+                {
+                    name,
+                    score
+                }
+            )
+        }, Math.random()*10000)
+    })
+}
+Promise.all([correctTest2("A"), correctTest2("B"), correctTest2("C")])
+    .then(data => console.log(data))
